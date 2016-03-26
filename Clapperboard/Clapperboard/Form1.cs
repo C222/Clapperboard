@@ -7,19 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using TwitchChatSharp;
-using System.Threading;
 
 namespace Clapperboard
 {
     public partial class Clapperboard : Form
     {
         public TwitchConnection client;
+        public string uname;
 
         public Clapperboard()
         {
+            uname = "justinfan" + (new Random()).Next(100000, 1000000).ToString();
             client = new TwitchConnection(
                 cluster: ChatEdgeCluster.Aws,
-                nick: "justinfan583736",
+                nick: uname,
                 capRequests: new string[] { "twitch.tv/tags" },
                 ratelimit: 1500,
                 secure: true
@@ -37,7 +38,6 @@ namespace Clapperboard
             };
             client.MessageReceived += (object sender, IrcMessageEventArgs e) =>
             {
-                //AppendDebugText(e.Message.ToString());
                 HandleMessage(e.Message);
             };
 
@@ -45,6 +45,14 @@ namespace Clapperboard
 
         private void HandleMessage(IrcMessage message)
         {
+            if (message.User == uname || message.User == "tmi.twitch.tv" || message.User == uname+".tmi.twitch.tv")
+            {
+                return;
+            }
+            if (!CheckUser(message))
+            {
+                return;
+            }
             AppendDebugText(message.User);
             AppendDebugText(message.Message);
             foreach (KeyValuePair<string, string> kvp in message.Tags)
@@ -54,10 +62,34 @@ namespace Clapperboard
             AppendDebugText("------------------------");
         }
 
+        private bool CheckUser(IrcMessage message)
+        {
+            if (message.User == ChannelNameBox.Text.ToLower())
+            {
+                return true;
+            }
+            else if (message.Tags["mod"] == "1" && YesMods.Checked)
+            {
+                return true;
+            }
+            else if (message.Tags["subscriber"] == "1" && YesSubs.Checked)
+            {
+                return true;
+            }
+            else if (YesAll.Checked)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         delegate void AppendDebugTextCB(string text);
         private void AppendDebugText(string text)
         {
-            if(this.DebugBox.InvokeRequired)
+            if (this.DebugBox.InvokeRequired)
             {
                 AppendDebugTextCB d = new AppendDebugTextCB(AppendDebugText);
                 this.Invoke(d, new object[] { text });
