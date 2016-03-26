@@ -33,6 +33,7 @@
             this.JoinButton = new System.Windows.Forms.Button();
             this.ChannelNameBox = new System.Windows.Forms.TextBox();
             this.DebugBox = new System.Windows.Forms.TextBox();
+            this.LeaveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ChannelLabel
@@ -52,6 +53,7 @@
             this.JoinButton.TabIndex = 1;
             this.JoinButton.Text = "Join";
             this.JoinButton.UseVisualStyleBackColor = true;
+            this.JoinButton.Click += new System.EventHandler(this.JoinButton_Click);
             // 
             // ChannelNameBox
             // 
@@ -65,14 +67,27 @@
             this.DebugBox.Location = new System.Drawing.Point(13, 57);
             this.DebugBox.Multiline = true;
             this.DebugBox.Name = "DebugBox";
-            this.DebugBox.Size = new System.Drawing.Size(259, 193);
+            this.DebugBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.DebugBox.Size = new System.Drawing.Size(391, 493);
             this.DebugBox.TabIndex = 3;
+            // 
+            // LeaveButton
+            // 
+            this.LeaveButton.Enabled = false;
+            this.LeaveButton.Location = new System.Drawing.Point(278, 27);
+            this.LeaveButton.Name = "LeaveButton";
+            this.LeaveButton.Size = new System.Drawing.Size(75, 23);
+            this.LeaveButton.TabIndex = 4;
+            this.LeaveButton.Text = "Leave";
+            this.LeaveButton.UseVisualStyleBackColor = true;
+            this.LeaveButton.Click += new System.EventHandler(this.LeaveButton_Click);
             // 
             // Clapperboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(784, 562);
+            this.Controls.Add(this.LeaveButton);
             this.Controls.Add(this.DebugBox);
             this.Controls.Add(this.ChannelNameBox);
             this.Controls.Add(this.JoinButton);
@@ -92,6 +107,7 @@
         private System.Windows.Forms.Button JoinButton;
         private System.Windows.Forms.TextBox ChannelNameBox;
         private System.Windows.Forms.TextBox DebugBox;
+        private System.Windows.Forms.Button LeaveButton;
     }
 }
 
